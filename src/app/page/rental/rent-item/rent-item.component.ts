@@ -32,7 +32,7 @@ export class RentItemComponent {
   }
   
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { this.loadRentalTable();}
 
   addRental() {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -52,7 +52,7 @@ export class RentItemComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.post('http://localhost:8080/rental-controller/add', this.rentalObj).subscribe(res => {
+        this.http.post('http://localhost:8080/rentalDetail-controller/add', this.rentalDetailObj).subscribe(res => {
           swalWithBootstrapButtons.fire({
             title: "Added!",
             text: "Your rental has been added.",
@@ -71,6 +71,111 @@ export class RentItemComponent {
         swalWithBootstrapButtons.fire({
           title: "Cancelled",
           text: "Your rental was not added.",
+          icon: "error"
+        });
+      }
+    });
+  }
+  addItems() {
+  }
+  public rentalDetailList: any;
+
+  public selectedRentalDetail = {
+    rentDetailID:"",
+    rentID:"",
+    itemID:"",
+    totalItemCost:"",
+    qty:""
+  }
+
+
+  loadRentalTable() {
+    this.http.get("http://localhost:8080/rentalDetail-controller/get-all").subscribe(res => {
+      this.rentalDetailList = res;
+      console.log(res);
+    });
+  }
+
+  deleteRentalDetail(rental: any) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.http.delete(`http://localhost:8080/rentalDetail-controller/delete-by-id/${rental.rentID}`, { responseType: 'text' }).subscribe(res => {
+          this.loadRentalTable();
+          swalWithBootstrapButtons.fire({
+            title: "Deleted!",
+            text: "The rental has been deleted.",
+            icon: "success"
+          });
+          console.log(res);
+        });
+        console.log(rental);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your rental record is safe.",
+          icon: "error"
+        });
+      }
+    });
+  }
+
+  edit(rental: any) {
+    this.selectedRentalDetail = rental;
+  }
+
+  updateRentalDetails() {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "Do you want to update this rental?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.http.put(`http://localhost:8080/rentalDetail-controller/update`, this.selectedRentalDetail).subscribe(res => {
+          this.loadRentalTable();
+          swalWithBootstrapButtons.fire({
+            title: "Updated!",
+            text: "Your rental record has been updated.",
+            icon: "success"
+          });
+          console.log(res);
+        }, err => {
+          swalWithBootstrapButtons.fire({
+            title: "Error!",
+            text: "There was an error updating the rental.",
+            icon: "error"
+          });
+          console.error(err);
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your rental record was not updated.",
           icon: "error"
         });
       }
