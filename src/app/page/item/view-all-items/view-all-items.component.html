@@ -1,0 +1,77 @@
+<p class="text-center h1 fw-bold mb-4 mx-1 mx-md-4 mt-4 ">VIEW ALL HARDWARE ITEMS</p>
+
+<div class="container">
+    <table class="table border">
+        <tr class="border text-center bg-black text-white">
+            <th>Count</th>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Rental Per Day</th>
+            <th>Availability</th>
+            <th>Quantity</th>
+            <th>Fine Per Day</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class="border text-center" *ngFor="let item of itemList; index as i">
+            <td>{{i+1}}</td>
+            <td>{{"ITEM@000" + item.itemID}}</td>
+            <td>{{item.description}}</td>
+            <td>{{item.rentalPerDay}}</td>
+            <td>{{item.availability}}</td>
+            <td>{{item.qty}}</td>
+            <td>{{item.finePerDay}}</td>
+            <td><button class="btn btn-danger" (click)="deleteItem(item)"><i
+                        class="bi bi-trash3-fill"></i></button>
+            </td>
+            <td><button class="btn btn-primary" (click)="editItem(item)" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"><i class="bi bi-pencil-square"></i></button></td>
+        </tr>
+    </table>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Hardware Item</h5>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="description" class="col-form-label">Description:</label>
+                        <input type="text" class="form-control" id="description" [(ngModel)]="selectedItem.description"
+                            name="description" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="rentalPerDay" class="col-form-label">Rental Per Day:</label>
+                        <input type="text" class="form-control" id="rentalPerDay" [(ngModel)]="selectedItem.rentalPerDay"
+                            name="rentalPerDay" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="availability" class="col-form-label">Availability:</label>
+                        <input type="text" class="form-control" id="availability" [(ngModel)]="selectedItem.availability"
+                            name="availability" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="availability" class="col-form-label">Quantity:</label>
+                        <input type="text" class="form-control" id="availability" [(ngModel)]="selectedItem.qty"
+                            name="qty" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="finePerDay" class="col-form-label">Fine Per Day:</label>
+                        <input type="text" class="form-control" id="finePerDay" [(ngModel)]="selectedItem.finePerDay"
+                            name="finePerDay" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-ripple-init
+                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="updateItem()" data-mdb-ripple-init>Update</button>
+            </div>
+        </div>
+    </div>
+</div>

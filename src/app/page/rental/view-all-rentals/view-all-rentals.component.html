@@ -1,0 +1,91 @@
+<p class="text-center h1 fw-bold mb-4 mx-1 mx-md-4 mt-4">VIEW ALL RENTALS</p>
+
+<div class="container">
+    <table class="table border">
+        <tr class="border text-center bg-black text-white">
+            <th>Count</th>
+            <th>Rent ID</th>
+            <th>Customer ID</th>
+            <th>Rental Date</th>
+            <th>Expected Return Date</th>
+            <th>Returned Date</th>
+            <th>Late Days</th>
+            <th>Fine</th>
+            <th>Total Cost</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class="border text-center" *ngFor="let rental of rentalList; index as i">
+            <td>{{i+1}}</td>
+            <td>{{"RENT@000" + rental.rentID}}</td>
+            <td>{{rental.customerID}}</td>
+            <td>{{rental.rentalDate | date}}</td>
+            <td>{{rental.expectedReturnDate | date}}</td>
+            <td>{{rental.returnedDate | date}}</td>
+            <td>{{rental.lateDays}}</td>
+            <td>{{rental.fine | currency}}</td>
+            <td>{{rental.totalCost | currency}}</td>
+            <td>
+                <button class="btn btn-danger" (click)="deleteRental(rental)">
+                    <i class="bi bi-trash3-fill"></i>
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-primary" (click)="edit(rental)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Rental</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="edit-rentID" class="col-form-label">Rental ID:</label>
+                        <input type="text" class="form-control" id="edit-rentID" [(ngModel)]="selectedRental.rentID" name="rentID" readonly/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-customerID" class="col-form-label">Customer ID:</label>
+                        <input type="text" class="form-control" id="edit-customerID" [(ngModel)]="selectedRental.customerID" name="customerID"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-rentalDate" class="col-form-label">Rental Date:</label>
+                        <input type="date" class="form-control" id="edit-rentalDate" [(ngModel)]="selectedRental.rentalDate" name="rentalDate"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-expectedReturnDate" class="col-form-label">Expected Return Date:</label>
+                        <input type="date" class="form-control" id="edit-expectedReturnDate" [(ngModel)]="selectedRental.expectedReturnDate" name="expectedReturnDate"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-returnedDate" class="col-form-label">Returned Date:</label>
+                        <input type="date" class="form-control" id="edit-returnedDate" [(ngModel)]="selectedRental.returnedDate" name="returnedDate"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-lateDays" class="col-form-label">Late Days:</label>
+                        <input type="number" class="form-control" id="edit-lateDays" [(ngModel)]="selectedRental.lateDays" name="lateDays"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-fine" class="col-form-label">Fine:</label>
+                        <input type="number" class="form-control" id="edit-fine" [(ngModel)]="selectedRental.fine" name="fine" step="0.01"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-totalCost" class="col-form-label">Total Cost:</label>
+                        <input type="number" class="form-control" id="edit-totalCost" [(ngModel)]="selectedRental.totalCost" name="totalCost" step="0.01"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="updateRental()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
